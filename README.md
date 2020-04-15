@@ -1,3 +1,4 @@
+
 # KVM utilities (DELL)
 Utility to work with the integrated hardware KVM switch of modern monitors.
 > *Currently the focus of this tool is the DELL U4919DW*
@@ -23,11 +24,13 @@ The tool consists of two components
 
 ### Usage
 >  First determine the device ID of the display. You can use `ddccontrol -p` on Linux. On Windows it's the 0-based index of the attached monitors.
+
+**Get the *src* folder**, navigate to *src\kvmutil* and execute kvmutil.py.
 ```
 kvmutil.py [-h] deviceid {inputselect,pbp,pbpsubinputselect,pbpswitch,pbpswitch2,pbpswap} ...
 ```
 #### Usage examples
-In the sub folders of `kvmutil`  there are some examples of real usages of the tool in Windows (`kvmutil\win`) and Linux (`kvmutil\linux`) 
+In the sub folders of `kvmutil` there are some examples of real usages of the tool in Windows (`kvmutil\win`) and Linux (`kvmutil\linux`) 
 
 ## MonitorTool Hook
 The tool is written in C# and uses the EasyHook framework *(see https://easyhook.github.io/)*.

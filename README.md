@@ -32,8 +32,8 @@ In the sub folders of `kvmutil`  there are some examples of real usages of the t
 ## MonitorTool Hook
 The tool is written in C# and uses the EasyHook framework *(see https://easyhook.github.io/)*.
 
-You can download the latest/nightly build: https://raw.githubusercontent.com/ScriptGod1337/kvm/master/downloads/MonitorToolHook.7z
-Usage: `Monitor.exe MonitorToolToSpy`
+You can download the latest/nightly build: https://raw.githubusercontent.com/ScriptGod1337/kvm/master/downloads/MonitorToolHook.7z  
+Usage: `Monitor.exe MonitorToolToSpy`  
 For example for DELL `Monitor.exe "C:\Program Files (x86)\Dell\Dell Display Manager\ddm.exe"`
 
 The monitor logs the VCP commands send by the program to the console. You can execute a functionality of the monitor manufacture tool and find out which VCP command with which parameter was written or read

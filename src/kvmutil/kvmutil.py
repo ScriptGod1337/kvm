@@ -123,8 +123,25 @@ vcpWriteCmds = {
 	),
 }
 # ======================================================================================================================
-def openDisplay(deviceID: int):
-	print("Accessing display %i..." % deviceID)
+def parseDeviceID(deviceID: str):
+	from friendlyname import findMonitorIndexByFriendlyName
+	
+	# if number use it directly
+	if deviceID.isnumeric():
+		try: return int(deviceID)
+		except ValueError: raise Exception("If deviceID is a number it must be an int")
+
+	# Only supports Windows
+	if not isOSWin(): raise Exception("Display friendly name only supported on Windows")
+
+	index = findMonitorIndexByFriendlyName(deviceID)
+	if index is None: raise Exception("Display with friendly name '%s' not found" % deviceID)
+	print("Found display name '%s' at ID=%d" % (deviceID, index))
+	
+	return index
+# ======================================================================================================================
+def openDevice(deviceID: int):
+	print("Accessing device with ID=%i..." % deviceID)
 	if isOSWin():
 		device = get_monitors()[deviceID]
 		device.open()
@@ -191,7 +208,7 @@ def switchPBPWithSub(device, subInputSource):
 		if isOSWin():
 			time.sleep(3.5)
 			# Re-open display
-			device = openDisplay(device.deviceID)
+			device = openDevice(device.deviceID)
 		elif isOsLinux(): time.sleep(3)
 
 		executeVCPCmd(device, "PBPSubInputSelect", subInputSource)
@@ -208,7 +225,7 @@ def swapPBP(device):
 
 if __name__ == "__main__":
 	argParser = argparse.ArgumentParser()
-	argParser.add_argument("deviceid", help="i2c bus ID of the device (Linux: e.g. determined via 'ddccontrol -p' || Windows: index in global display list)", type=int)
+	argParser.add_argument("device", help="i2c bus ID of the device (Linux: e.g. determined via 'ddccontrol -p' || Windows: index in global display list or display friendly name)")
 	# ---
 	subParsers = argParser.add_subparsers(help="command categorie")
 	for cmdName, cmdInfo in vcpWriteCmds.items():
@@ -227,8 +244,8 @@ if __name__ == "__main__":
 	args = argParser.parse_args()
 
 	# open device
-	deviceID = args.deviceid
-	device = openDisplay(deviceID)
+	deviceID = parseDeviceID(args.device)
+	deviceObj = openDevice(deviceID)
 	
 	cmdExecuted = False
 
@@ -239,20 +256,20 @@ if __name__ == "__main__":
 			if isinstance(selectedParams, list):
 				# multiple parameter
 				cmdExecuted = True
-				for selectedParam in selectedParams: executeVCPCmd(device, cmdName, selectedParam)
+				for selectedParam in selectedParams: executeVCPCmd(deviceObj, cmdName, selectedParam)
 			elif not selectedParams is None:
 				cmdExecuted = True
-				executeVCPCmd(device, cmdName, selectedParams) # on parameter
+				executeVCPCmd(deviceObj, cmdName, selectedParams) # on parameter
 	
 	# PBP switch/wap
 	if hasattr(args, "pbpswitch"):
-		switchPBP(device)
+		switchPBP(deviceObj)
 		cmdExecuted = True
 	elif hasattr(args, "pbpswitch2"):
-		switchPBPWithSub(device, args.pbpswitch2)
+		switchPBPWithSub(deviceObj, args.pbpswitch2)
 		cmdExecuted = True
 	elif hasattr(args, "pbpswap"):
-		swapPBP(device)
+		swapPBP(deviceObj)
 		cmdExecuted = True
 
 	if not cmdExecuted:

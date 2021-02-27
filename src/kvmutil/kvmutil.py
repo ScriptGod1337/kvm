@@ -22,18 +22,18 @@ class VCPCode(Enum):
 	# see VESA Monitor Control Command Set Standard v2.21, page 81 - (e.g. https://milek7.pl/ddcbacklight/mccs.pdf)
 	InputSelect					= 0x60
 
-	# DELL (4919DW?) specific
-	DELL_4919DW_PBP_SwapVideo	= 0xe5
-	DELL_4919DW_PBP_SwapInput	= 0xe7
-	DELL_4919DW_PBP_SubInput	= 0xe8
-	DELL_4919DW_PBP_Mode		= 0xe9
+	# DELL (U4919DW?) specific
+	DELL_U4919DW_PBP_SwapVideo	= 0xe5
+	DELL_U4919DW_PBP_SwapInput	= 0xe7
+	DELL_U4919DW_PBP_SubInput	= 0xe8
+	DELL_U4919DW_PBP_Mode		= 0xe9
 	UNKNOWN						= 0x00
 
 class InputName(Enum):
-	HDMI1			= auto()
-	HDMI2			= auto()
-	DisplayPort1	= auto()
-	USBC_DELL_4919DW= auto()
+	HDMI1				= auto()
+	HDMI2				= auto()
+	DisplayPort1		= auto()
+	USBC_DELL_U4919DW	= auto()
 
 class PBPCmd(Enum):
 	ON	= auto()
@@ -43,28 +43,28 @@ class PBPCmd(Enum):
 VCPCodeValues = {
 	VCPCode.InputSelect: {
 		# see VESA Monitor Control Command Set Standard v2.21, page 81 - (e.g. https://milek7.pl/ddcbacklight/mccs.pdf)
-		InputName.HDMI1:			0x11,
-		InputName.HDMI2:			0x12,
-		InputName.DisplayPort1:		0x0f,
+		InputName.HDMI1:				0x11,
+		InputName.HDMI2:				0x12,
+		InputName.DisplayPort1:			0x0f,
 
-		# DELL (4919DW?) specific
-		InputName.USBC_DELL_4919DW:	0x1B1B,
+		# DELL (U4919DW?) specific
+		InputName.USBC_DELL_U4919DW:	0x1B1B,
 	},
-	VCPCode.DELL_4919DW_PBP_SwapVideo: {
-		PBPCmd.SWAP:				0xf000,
+	VCPCode.DELL_U4919DW_PBP_SwapVideo: {
+		PBPCmd.SWAP:					0xf000,
 	},
-	VCPCode.DELL_4919DW_PBP_SwapInput: {
-		PBPCmd.SWAP:				0xff00,
+	VCPCode.DELL_U4919DW_PBP_SwapInput: {
+		PBPCmd.SWAP:					0xff00,
 	},
-	VCPCode.DELL_4919DW_PBP_SubInput: {
-		InputName.HDMI1:			0x11,
-		InputName.HDMI2:			0x12,
-		InputName.DisplayPort1:		0x0f,
-		InputName.USBC_DELL_4919DW:	0x1b,
+	VCPCode.DELL_U4919DW_PBP_SubInput: {
+		InputName.HDMI1:				0x11,
+		InputName.HDMI2:				0x12,
+		InputName.DisplayPort1:			0x0f,
+		InputName.USBC_DELL_U4919DW:	0x1b,
 	},
-	VCPCode.DELL_4919DW_PBP_Mode: {
-		PBPCmd.ON:					0x24,
-		PBPCmd.OFF:					0x00,
+	VCPCode.DELL_U4919DW_PBP_Mode: {
+		PBPCmd.ON:						0x24,
+		PBPCmd.OFF:						0x00,
 	}
 }
 # ======================================================================================================================
@@ -95,30 +95,30 @@ vcpWriteCmds = {
 			InputName.HDMI2.name.lower(): 			VCPWriteCommand(VCPCode.InputSelect, VCPCodeValues[VCPCode.InputSelect][InputName.HDMI2]),
 			InputName.DisplayPort1.name.lower():	VCPWriteCommand(VCPCode.InputSelect, VCPCodeValues[VCPCode.InputSelect][InputName.DisplayPort1]),
 
-			# DELL 4919DW specific
-			InputName.USBC_DELL_4919DW.name.lower():VCPWriteCommand(VCPCode.InputSelect, VCPCodeValues[VCPCode.InputSelect][InputName.USBC_DELL_4919DW]),
+			# DELL U4919DW specific
+			InputName.USBC_DELL_U4919DW.name.lower():VCPWriteCommand(VCPCode.InputSelect, VCPCodeValues[VCPCode.InputSelect][InputName.USBC_DELL_U4919DW]),
 		},
 	),
 	"PBP": VCPCommand(
 		"Change PBP mode options",
 		"PBP command",
 		"+", {
-			"on":		VCPWriteCommand(VCPCode.DELL_4919DW_PBP_Mode, VCPCodeValues[VCPCode.DELL_4919DW_PBP_Mode][PBPCmd.ON]),
-			"off":		VCPWriteCommand(VCPCode.DELL_4919DW_PBP_Mode, VCPCodeValues[VCPCode.DELL_4919DW_PBP_Mode][PBPCmd.OFF]),
-			"swapvideo":VCPWriteCommand(VCPCode.DELL_4919DW_PBP_SwapVideo, VCPCodeValues[VCPCode.DELL_4919DW_PBP_SwapVideo][PBPCmd.SWAP]),
-			"swapinput":VCPWriteCommand(VCPCode.DELL_4919DW_PBP_SwapInput, VCPCodeValues[VCPCode.DELL_4919DW_PBP_SwapInput][PBPCmd.SWAP]),
+			"on":		VCPWriteCommand(VCPCode.DELL_U4919DW_PBP_Mode, VCPCodeValues[VCPCode.DELL_U4919DW_PBP_Mode][PBPCmd.ON]),
+			"off":		VCPWriteCommand(VCPCode.DELL_U4919DW_PBP_Mode, VCPCodeValues[VCPCode.DELL_U4919DW_PBP_Mode][PBPCmd.OFF]),
+			"swapvideo":VCPWriteCommand(VCPCode.DELL_U4919DW_PBP_SwapVideo, VCPCodeValues[VCPCode.DELL_U4919DW_PBP_SwapVideo][PBPCmd.SWAP]),
+			"swapinput":VCPWriteCommand(VCPCode.DELL_U4919DW_PBP_SwapInput, VCPCodeValues[VCPCode.DELL_U4919DW_PBP_SwapInput][PBPCmd.SWAP]),
 		},
 	),
 	"PBPSubInputSelect": VCPCommand(
 		"Change the input source of the PBP sub picture",
 		"Input source to switch to",
 		None, {
-			InputName.HDMI1.name.lower(): 			VCPWriteCommand(VCPCode.DELL_4919DW_PBP_SubInput, VCPCodeValues[VCPCode.DELL_4919DW_PBP_SubInput][InputName.HDMI1]),
-			InputName.HDMI2.name.lower(): 			VCPWriteCommand(VCPCode.DELL_4919DW_PBP_SubInput, VCPCodeValues[VCPCode.DELL_4919DW_PBP_SubInput][InputName.HDMI2]),
-			InputName.DisplayPort1.name.lower():	VCPWriteCommand(VCPCode.DELL_4919DW_PBP_SubInput, VCPCodeValues[VCPCode.DELL_4919DW_PBP_SubInput][InputName.DisplayPort1]),
+			InputName.HDMI1.name.lower(): 			VCPWriteCommand(VCPCode.DELL_U4919DW_PBP_SubInput, VCPCodeValues[VCPCode.DELL_U4919DW_PBP_SubInput][InputName.HDMI1]),
+			InputName.HDMI2.name.lower(): 			VCPWriteCommand(VCPCode.DELL_U4919DW_PBP_SubInput, VCPCodeValues[VCPCode.DELL_U4919DW_PBP_SubInput][InputName.HDMI2]),
+			InputName.DisplayPort1.name.lower():	VCPWriteCommand(VCPCode.DELL_U4919DW_PBP_SubInput, VCPCodeValues[VCPCode.DELL_U4919DW_PBP_SubInput][InputName.DisplayPort1]),
 			
-			# DELL 4919DW specific
-			InputName.USBC_DELL_4919DW.name.lower():VCPWriteCommand(VCPCode.DELL_4919DW_PBP_SubInput, VCPCodeValues[VCPCode.DELL_4919DW_PBP_SubInput][InputName.USBC_DELL_4919DW]),
+			# DELL U4919DW specific
+			InputName.USBC_DELL_U4919DW.name.lower():VCPWriteCommand(VCPCode.DELL_U4919DW_PBP_SubInput, VCPCodeValues[VCPCode.DELL_U4919DW_PBP_SubInput][InputName.USBC_DELL_U4919DW]),
 		}
 	),
 }
@@ -169,19 +169,19 @@ def executeVCPCmd(device, cmdName, parameter):
 	print("...done")
 
 def switchPBP(device):
-	currentPBPValue = readVCPValue(device, VCPCode.DELL_4919DW_PBP_Mode)
-	if currentPBPValue == VCPCodeValues[VCPCode.DELL_4919DW_PBP_Mode][PBPCmd.ON]: pbpMode = PBPCmd.ON
-	elif currentPBPValue == VCPCodeValues[VCPCode.DELL_4919DW_PBP_Mode][PBPCmd.OFF]: pbpMode = PBPCmd.OFF
+	currentPBPValue = readVCPValue(device, VCPCode.DELL_U4919DW_PBP_Mode)
+	if currentPBPValue == VCPCodeValues[VCPCode.DELL_U4919DW_PBP_Mode][PBPCmd.ON]: pbpMode = PBPCmd.ON
+	elif currentPBPValue == VCPCodeValues[VCPCode.DELL_U4919DW_PBP_Mode][PBPCmd.OFF]: pbpMode = PBPCmd.OFF
 	else: raise Exception("Unknown PBPMode %s" % currentPBPValue)
 	print("Current PBPMode=%s" % pbpMode)
 
 	if pbpMode == PBPCmd.OFF:
 		print("Switching PBP on...")
-		writeVCPValue(device, VCPWriteCommand(VCPCode.DELL_4919DW_PBP_Mode, VCPCodeValues[VCPCode.DELL_4919DW_PBP_Mode][PBPCmd.ON]))
+		writeVCPValue(device, VCPWriteCommand(VCPCode.DELL_U4919DW_PBP_Mode, VCPCodeValues[VCPCode.DELL_U4919DW_PBP_Mode][PBPCmd.ON]))
 		return PBPCmd.ON
 	elif pbpMode == PBPCmd.ON:
 		print("Switching PBP off...")
-		writeVCPValue(device, VCPWriteCommand(VCPCode.DELL_4919DW_PBP_Mode, VCPCodeValues[VCPCode.DELL_4919DW_PBP_Mode][PBPCmd.OFF]))
+		writeVCPValue(device, VCPWriteCommand(VCPCode.DELL_U4919DW_PBP_Mode, VCPCodeValues[VCPCode.DELL_U4919DW_PBP_Mode][PBPCmd.OFF]))
 		return PBPCmd.OFF
 
 def switchPBPWithSub(device, subInputSource):
@@ -199,12 +199,12 @@ def switchPBPWithSub(device, subInputSource):
 
 def swapPBP(device):
 	writeVCPValue(device, 
-		VCPWriteCommand(VCPCode.DELL_4919DW_PBP_SwapVideo, VCPCodeValues[VCPCode.DELL_4919DW_PBP_SwapVideo][PBPCmd.SWAP]))
+		VCPWriteCommand(VCPCode.DELL_U4919DW_PBP_SwapVideo, VCPCodeValues[VCPCode.DELL_U4919DW_PBP_SwapVideo][PBPCmd.SWAP]))
 	
 	time.sleep(0.5)
 	
 	writeVCPValue(device,
-		VCPWriteCommand(VCPCode.DELL_4919DW_PBP_SwapInput, VCPCodeValues[VCPCode.DELL_4919DW_PBP_SwapInput][PBPCmd.SWAP]))
+		VCPWriteCommand(VCPCode.DELL_U4919DW_PBP_SwapInput, VCPCodeValues[VCPCode.DELL_U4919DW_PBP_SwapInput][PBPCmd.SWAP]))
 
 if __name__ == "__main__":
 	argParser = argparse.ArgumentParser()

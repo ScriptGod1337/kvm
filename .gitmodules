@@ -1,3 +1,3 @@
 [submodule "kvmutil/ddcci"]
 	path = src/kvmutil/ddcci
-	url = https://github.com/newAM/monitorcontrol
+	url = https://github.com/Informatic/python-ddcci

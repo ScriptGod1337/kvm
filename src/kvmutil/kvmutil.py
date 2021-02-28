@@ -123,9 +123,7 @@ vcpWriteCmds = {
 	),
 }
 # ======================================================================================================================
-def parseDeviceID(deviceID: str):
-	from friendlyname import findMonitorIndexByFriendlyName
-	
+def parseDeviceID(deviceID: str):	
 	# if number use it directly
 	if deviceID.isnumeric():
 		try: return int(deviceID)
@@ -134,6 +132,7 @@ def parseDeviceID(deviceID: str):
 	# Only supports Windows
 	if not isOSWin(): raise Exception("Display friendly name only supported on Windows")
 
+	from friendlyname import findMonitorIndexByFriendlyName
 	index = findMonitorIndexByFriendlyName(deviceID)
 	if index is None: raise Exception("Display with friendly name '%s' not found" % deviceID)
 	print("Found display name '%s' at ID=%d" % (deviceID, index))

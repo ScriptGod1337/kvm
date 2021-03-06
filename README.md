@@ -53,3 +53,10 @@ Monitor.exe "C:\Program Files (x86)\Dell\Dell Display Manager\ddm.exe"
 ```
 
 ***These values can be used in the KVM Util or in custom scripts***
+
+### Run the code locally
+1. Download the code or clone the repo
+2. Copy the EasyHook dll's over from the download linked above into the `src\MonitorToolHook\Monitor` folder
+3. Open the solution file
+4. Go to the properties page of `Monitor.csproj` and add the location of `ddm.exe` to the Debug settings 'command line arguments': `"C:\Program Files (x86)\Dell\Dell Display Manager\ddm.exe"`
+5. Run the Monitor project (set as startup project)

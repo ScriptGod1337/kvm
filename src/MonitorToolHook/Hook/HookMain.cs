@@ -19,7 +19,7 @@ namespace Hook {
             hooks.Add(HookAPI("dxva2.dll", "GetVCPFeatureAndVCPFeatureReply", new GetVCPFeatureAndVCPFeatureReply_Delegate(GetVCPFeatureAndVCPFeatureReply_Hook)));
             hooks.Add(HookAPI("dxva2.dll", "SetVCPFeature", new SetVCPFeature_Delegate(SetVCPFeature_Hook)));
 
-            channel.ReportMessages(String.Format("Hook active. Starting application...", EasyHook.RemoteHooking.GetCurrentProcessId()));
+            channel.ReportMessages("Hook active. Starting application...");
             EasyHook.RemoteHooking.WakeUpProcess();
 
             try {

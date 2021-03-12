@@ -39,6 +39,8 @@ You can download the latest/nightly build: https://raw.githubusercontent.com/Scr
 Usage: `Monitor.exe MonitorToolToSpy`  
 For example for DELL `Monitor.exe "C:\Program Files (x86)\Dell\Dell Display Manager\ddm.exe"`
 
+**Important**: the monitor must be the parent process of the program to hook - e.g. by doing a fresh start of it. *This means close Dell Display Manager prior starting the monitor*
+
 The monitor logs the VCP commands send by the program to the console. You can execute a functionality of the monitor manufacture tool and find out which VCP command with which parameter was written or read
 ```
 Monitor.exe "C:\Program Files (x86)\Dell\Dell Display Manager\ddm.exe"

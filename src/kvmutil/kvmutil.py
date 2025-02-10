@@ -161,7 +161,7 @@ def readVCPValue(device, code: VCPCode):
 			"-b", str(device.deviceID),
 			"getvcp", "0x%02x" % code.value]))
 
-		match = re.match(".*sh=0x(\w{2}).*sl=0x(\w{2})", cmdOutput)
+		match = re.match(r".*sh=0x(\w{2}).*sl=0x(\w{2})", cmdOutput)
 		if match == None: raise Exception("invalid output from ddcutil '%s'" % cmdOutput)
 
 		readValue = int(match.group(1), 16) << 8 | int(match.group(2), 16)

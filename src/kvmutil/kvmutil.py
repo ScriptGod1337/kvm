@@ -183,7 +183,7 @@ def writeVCPValue(device, vcpWriteCmd: VCPWriteCommand):
 	print("Sending %s..." % vcpWriteCmd)
 	if isOSWin(): device.vcp.set_vcp_feature(vcpWriteCmd.code.value, vcpWriteCmd.value)
 	elif isOsLinux(): device.write(vcpWriteCmd.code.value, vcpWriteCmd.value)
-	elif isMacOS(): device.set_verify(vcpWriteCmd.code.value, vcpWriteCmd.value)
+	elif isMacOS(): device.set_robust(vcpWriteCmd.code.value, vcpWriteCmd.value)
 	else: raise Exception("Unsupported OS '%s'" % platform.system())
 
 def executeVCPCmd(device, cmdName, parameter):

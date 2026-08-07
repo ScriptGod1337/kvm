@@ -137,6 +137,8 @@ def list_displays():
             iokit.IOObjectRelease(svc)
     return found
 
+class _StaleReply(Exception):
+    pass
 
 class MacDDCDevice:
     """ddcutil-equivalent handle for one external display."""
@@ -195,9 +197,6 @@ class MacDDCDevice:
         if rc != KERN_SUCCESS:
             raise OSError("IOAVServiceReadI2C failed: 0x%08x" % (rc & 0xFFFFFFFF))
         return bytes(buf)
-    
-    class _StaleReply(Exception):
-        pass
 
     # -- VCP ----------------------------------------------------------------
     def write(self, vcp_code: int, value: int, fire_and_forget: bool = False):
@@ -266,6 +265,11 @@ class MacDDCDevice:
                 return True
             time.sleep(0.1 * (i + 1))              # back off and retry
         return False
+
+    def set_robust(self, vcp_code: int, value: int, tries: int = 3):
+        for _ in range(tries):
+            self.write(vcp_code, value, fire_and_forget=True)
+            time.sleep(0.15)
 
     def open(self):      # API parity with monitorcontrol
         return self

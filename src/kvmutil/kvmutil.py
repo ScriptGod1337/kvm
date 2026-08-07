@@ -8,12 +8,16 @@ def isOSWin():
 	return platform.system().lower() == "windows"
 def isOsLinux():
 	return platform.system().lower().startswith("linux")
+def isMacOS():
+	return platform.system().lower().startswith("darwin")
 
 if isOSWin(): from monitorcontrol import get_monitors
 elif isOsLinux():
 	from ddcci.ddcci import DDCCIDevice
 	import subprocess
 	import re
+elif isMacOS():
+	import macddc
 else: raise Exception("Unsupported OS '%s'" % platform.system())
 
 # Defintion of DDC/CI codes
@@ -146,6 +150,8 @@ def openDevice(deviceID: int):
 		device.open()
 	elif isOsLinux():
 		device = DDCCIDevice(deviceID)
+	elif isMacOS():
+		device = macddc.MacDDCDevice(deviceID)
 	else: raise Exception("Unsupported OS '%s'" % platform.system())
 
 	device.deviceID = deviceID
@@ -166,6 +172,9 @@ def readVCPValue(device, code: VCPCode):
 
 		readValue = int(match.group(1), 16) << 8 | int(match.group(2), 16)
 		print("...ddcutil getvcp 0x%04x" % readValue)
+	elif isMacOS():
+		readValue = device.read(code.value)
+	else: raise Exception("Unsupported OS '%s'" % platform.system())
 
 	print("...got 0x%04x" % readValue)
 	return readValue
@@ -174,7 +183,8 @@ def writeVCPValue(device, vcpWriteCmd: VCPWriteCommand):
 	print("Sending %s..." % vcpWriteCmd)
 	if isOSWin(): device.vcp.set_vcp_feature(vcpWriteCmd.code.value, vcpWriteCmd.value)
 	elif isOsLinux(): device.write(vcpWriteCmd.code.value, vcpWriteCmd.value)
-	else: raise Exception()
+	elif isMacOS(): device.set_verify(vcpWriteCmd.code.value, vcpWriteCmd.value)
+	else: raise Exception("Unsupported OS '%s'" % platform.system())
 
 def executeVCPCmd(device, cmdName, parameter):
 	vcpWriteCmd = vcpWriteCmds[cmdName].options[parameter]
@@ -204,7 +214,7 @@ def switchPBPWithSub(device, subInputSource):
 	if switchPBP(device) == PBPCmd.ON:
 		print("PBP is on -> setting sub input...")
 		
-		if isOSWin():
+		if isOSWin() or isMacOS():
 			time.sleep(3.5)
 			# Re-open display
 			device = openDevice(device.deviceID)
